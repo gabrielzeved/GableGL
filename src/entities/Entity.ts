@@ -1,9 +1,5 @@
-import { Vector2 } from "../math/Vector2";
+import { vec2 } from "gl-matrix";
 
 export class Entity {
-  public position: Vector2 = new Vector2();
-
-  constructor(x: number, y: number) {
-    this.position = new Vector2(x, y);
-  }
+  position: vec2;
 }
