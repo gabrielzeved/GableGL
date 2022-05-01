@@ -21,14 +21,14 @@ export class VAO {
 
   enable(shaderProgram: ShaderProgram) {
     this.vbos.forEach((vbo) => {
-      const location = shaderProgram.getLocation(vbo.attribute);
+      const location = shaderProgram.getAttribLocation(vbo.attribute);
       this.gl.enableVertexAttribArray(location);
     });
   }
 
   disable(shaderProgram: ShaderProgram) {
     this.vbos.forEach((vbo) => {
-      const location = shaderProgram.getLocation(vbo.attribute);
+      const location = shaderProgram.getAttribLocation(vbo.attribute);
       this.gl.disableVertexAttribArray(location);
     });
   }
@@ -44,7 +44,7 @@ export class VAO {
     const vbo = new VBO(this.gl, attribute);
     vbo.storeData(data);
     this.vbos.push(vbo);
-
+    vbo.bind();
     this.gl.vertexAttribPointer(
       attributeLocation,
       dimension,

@@ -32,7 +32,18 @@ export class ShaderProgram {
     this.gl.useProgram(this.program);
   }
 
-  getLocation(attrib: string) {
+  getAttribLocation(attrib: string) {
     return this.gl.getAttribLocation(this.program, attrib);
   }
+
+  getUniformLocation(uniform: string){
+    return this.gl.getUniformLocation(this.program, uniform);
+  }
+
+  log(){
+    Object.values(this.shaders).filter((shader) => !shader.success).forEach((shader) => {
+      console.log(shader.infoLog);
+    });
+  }
+  
 }
