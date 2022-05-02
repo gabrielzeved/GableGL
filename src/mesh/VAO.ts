@@ -37,12 +37,13 @@ export class VAO {
     attribute: string,
     attributeLocation: number,
     data: BufferSource,
-    dimension: number
+    dimension: number,
+    usage: number = this.gl.STATIC_DRAW
   ) {
     this.bind();
 
     const vbo = new VBO(this.gl, attribute);
-    vbo.storeData(data);
+    vbo.storeData(data, usage);
     this.vbos.push(vbo);
     vbo.bind();
     this.gl.vertexAttribPointer(

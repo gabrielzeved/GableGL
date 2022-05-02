@@ -1,8 +1,10 @@
-import { Quad } from "./mesh/Quad";
 import { Canvas } from "./renderer/Canvas";
 import { Shader } from "./shader/Shader";
 import { ShaderProgram } from "./shader/ShaderProgram";
-import { Texture } from "./texture/Texture";
+import { AnimatedSprite } from "./sprites/AnimatedSprite";
+import { Animation2D } from "./sprites/Animation2D";
+import { SpriteBoundaries } from "./sprites/Sprite";
+import { Timer } from "./utils/Timer";
 
 const vertexShaderSrc = `
 attribute vec3 coordinates;
@@ -47,18 +49,42 @@ shaderProgram.addShader(fragmentShader);
 shaderProgram.create();
 shaderProgram.use();
 
-const texture = new Texture(gl, gl.TEXTURE_2D);
-texture.load('/public/wall.jpg');
+const animation : SpriteBoundaries[] = [
+  {
+    position: [0,0],
+    size: [24,24]
+  },
+  {
+    position: [24,0],
+    size: [24,24]
+  },
+  {
+    position: [24 * 2,0],
+    size: [24,24]
+  },
+  {
+    position: [24 * 3,0],
+    size: [24,24]
+  },
+]
 
-const quad = new Quad(gl, shaderProgram);
-quad.addTexture(texture);
+const animation2D = new Animation2D("idle", animation, 0.4);
+const sprite = new AnimatedSprite(animation[0], '/spritesheet.png', gl, shaderProgram);
+sprite.addAnimation(animation2D);
+sprite.setAnimation("idle")
 
-quad.draw(shaderProgram);
-function drawScene() {
+const timer = new Timer();
+
+sprite.draw(shaderProgram);
+function drawScene(time: DOMHighResTimeStamp) {
+  gl.enable(gl.BLEND);
+  gl.blendFunc (gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   canvas.clearColor();
   shaderProgram.use();
-  quad.draw(shaderProgram);
+  sprite.update(timer.delta);
+  sprite.draw(shaderProgram);
+  timer.update(time);
   requestAnimationFrame(drawScene);
 }
 
-drawScene();
+drawScene(0);

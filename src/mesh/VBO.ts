@@ -13,9 +13,9 @@ export class VBO {
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vbo);
   }
 
-  storeData(data: BufferSource) {
+  storeData(data: BufferSource, usage: number = this.gl.STATIC_DRAW) {
     this.bind();
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, data, this.gl.STATIC_DRAW);
+    this.gl.bufferData(this.gl.ARRAY_BUFFER, data, usage);
   }
 
   unbind() {

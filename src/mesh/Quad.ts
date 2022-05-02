@@ -19,12 +19,18 @@ export class Quad extends Mesh {
     0.0, 1.0,
   ]);
 
-  constructor(gl: WebGL2RenderingContext, shaderProgram: ShaderProgram) {
+  constructor(gl: WebGL2RenderingContext, private shaderProgram: ShaderProgram) {
     super(gl);
     this.ebo.storeData(this.defaultIndices.length, this.defaultIndices);
     
     this.vao.storeData("coordinates", shaderProgram.getAttribLocation("coordinates"), this.defaultBuffer, 3);
     
-    this.vao.storeData("texCoords", shaderProgram.getAttribLocation("texCoords"), this.defaultTexCoords, 2);
+    this.vao.storeData("texCoords", shaderProgram.getAttribLocation("texCoords"), this.defaultTexCoords, 2, gl.DYNAMIC_DRAW);
   }
+
+  setTexCoords(texCoords: Float32Array){
+    this.vao.bind();
+    this.vao.storeData("texCoords", this.shaderProgram.getAttribLocation("texCoords"), texCoords, 2, WebGL2RenderingContext.DYNAMIC_DRAW);
+  }
+
 }
